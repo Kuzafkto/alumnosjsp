@@ -2,16 +2,16 @@ package modelos;
 
 public class Grupo {
     long id;
-    String name;
+    String curso;
     String headTeacherName;
 
     public Grupo(){
         this(0,"","");
     }
 
-    public Grupo(long id,String name, String headTeacherName){
+    public Grupo(long id,String curso, String headTeacherName){
         this.id=id;
-        this.name=name;
+        this.curso=curso;
         this.headTeacherName=headTeacherName;
     }
 
@@ -22,10 +22,10 @@ public class Grupo {
         this.id = id;
     }
     public String getName() {
-        return name;
+        return curso;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String curso) {
+        this.curso = curso;
     }
     public String getHeadTeacherName() {
         return headTeacherName;
@@ -35,6 +35,6 @@ public class Grupo {
     }
     @Override
     public String toString() {
-        return String.format("ID: %d, Nombre: %s, Profesor Cabecera: %s", this.id, this.name, this.headTeacherName);
+        return String.format("ID: %d, Nombre: %s, Profesor Cabecera: %s", this.id, this.curso, this.headTeacherName);
     }
 }

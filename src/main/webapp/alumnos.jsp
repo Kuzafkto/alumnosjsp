@@ -18,7 +18,6 @@
     ConnectionPool pool=(ConnectionPool)session.getAttribute("pool");
     try{
         AlumnosService aService = new AlumnosService(pool.getConnection());
-        GruposService gService = new GruposService(pool.getConnection());
     %>
         <form method="post" action="controlAlumnos.jsp">
             <input type="hidden" value="create" name="mode">
@@ -26,20 +25,14 @@
         </form>
 
     <%
-      //out.print("<button onclick=\"window.location.href='controlAlumnos.jsp?mode=\"create\"'\">Agregar</button>");
-    //out.print("<button onclick=\"window.location.href='controlAlumnos.jsp';session.setAttribute("mode","create");\">Agregar</button>");
-        /* tienes que tener en cada administrador (ejemplo controlAlumnosjsp) todos los metodos del crud
-        sin tener en cuenta la matriculacion, la cual tendrá su propia administracion, para cada uno se pasara el parametro
-        mode que indicara en que modo inicia el programa */
-
         for (Alumno al : aService.requestAll()) {
             out.print("<span>"+al.toString()+"</span><br><form method='get' action='controlAlumnos.jsp'>"+
                 "<input type='hidden' value='edit' name='mode' /><input type='hidden' name='id' value='"+al.getId()+"'/>"+
                 "<input type='hidden' name='name' value='"+al.getNombre()+"'/><input type='hidden' name='surnames' value='"+al.getApellidos()+"'/>"+
-                "<input type='submit' value='Editar'/></form>");
-            
-                    //estoy tratando de poder meter en el form los valores para poder en el editar poner en el controlAlumnosjsp
-                    //value un valor by default
+                "<input type='submit' value='Editar'/></form>"+
+                "<form method='get' action='controlAlumnos.jsp'>"+
+                    "<input type='hidden' value='delete' name='mode' /><input type='hidden' name='id' value='"+al.getId()+"'/>"+
+                    "<input type='submit' value='Borrar'/></form>");
         } 
     }catch (SQLException e) {
         out.print("<span>NO funciona</span>");
@@ -51,5 +44,11 @@
         pool.closeAll();
     }
 %>
+<form method="get" action="index.jsp">
+    <input type="hidden" name="userName" value=<%=session.getAttribute("userName")%>>
+    <input type="hidden" name="password" value=<%=session.getAttribute("password")%>>
+    <input type="hidden" name="trying" value="access">
+    <input type="submit" value="Volver">
+</form>
 </body>
 </html>

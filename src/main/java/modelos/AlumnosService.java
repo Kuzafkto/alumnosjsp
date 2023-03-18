@@ -17,17 +17,18 @@ public class AlumnosService {
         Statement statement = null;
         ArrayList<Alumno> result = new ArrayList<Alumno>();
         statement = this.conn.createStatement();   
-        String sql = "SELECT id, nombre, apellidos, grupo FROM alumnos";
-        // Ejecución de la consulta
+        String sql = "SELECT a.id, a.nombre, a.apellidos,IFNULL(g.curso,'Sin_Curso')as 'curso', a.id_grupo FROM alumnos a left join grupos g on(a.id_grupo = g.id)";
+        // Ejecución de la consulta 
         ResultSet querySet = statement.executeQuery(sql);
         // Recorrido del resultado de la consulta
         while(querySet.next()) {
             long id = querySet.getInt("id");
             String nombre = querySet.getString("nombre");
             String apellidos = querySet.getString("apellidos");
-            long groupID = querySet.getInt("grupo");
+            long groupID = querySet.getInt("id_grupo");
+            String groupName=querySet.getString("curso");
             
-            result.add(new Alumno(id, nombre, apellidos,groupID));
+            result.add(new Alumno(id, nombre, apellidos,groupID,groupName));
         } 
         statement.close();    
         return result;
@@ -37,7 +38,7 @@ public class AlumnosService {
         Statement statement = null;
         Alumno result = null;
         statement = this.conn.createStatement();    
-        String sql = String.format("SELECT id, nombre, apellidos, grupo FROM alumnos WHERE id=%d", id);
+        String sql = String.format("SELECT a.id, a.nombre, a.apellidos,g.curso, a.id_grupo FROM alumnos a left join grupos g on(a.id_grupo = g.id) WHERE a.id=%d", id);
         // Ejecución de la consulta
         ResultSet querySet = statement.executeQuery(sql);
         // Recorrido del resultado de la consulta
@@ -45,7 +46,7 @@ public class AlumnosService {
             String nombre = querySet.getString("nombre");
             String apellidos = querySet.getString("apellidos");
             long groupID=querySet.getInt("grupo");
-            result = new Alumno(id, nombre, apellidos,groupID);
+            result = new Alumno(id, nombre, apellidos,groupID,"curso");
         }
         statement.close();    
         return result;
@@ -56,9 +57,9 @@ public class AlumnosService {
         statement = this.conn.createStatement();
         String sql ;
         if(groupID==0){
-             sql = String.format("INSERT INTO alumnos (nombre, apellidos,grupo) VALUES ('%s', '%s',null)", nombre, apellidos);
+             sql = String.format("INSERT INTO alumnos (nombre, apellidos,id_grupo) VALUES ('%s', '%s',null)", nombre, apellidos);
         }else{
-             sql = String.format("INSERT INTO alumnos (nombre, apellidos,grupo) VALUES ('%s', '%s','%s')", nombre, apellidos,groupID);
+             sql = String.format("INSERT INTO alumnos (nombre, apellidos,id_grupo) VALUES ('%s', '%s','%s')", nombre, apellidos,groupID);
         }
         // Ejecución de la consulta
         // ES UN ENTERO YA QUE DEVUELVE EL NUMERO DE FILAS AFECTADAS
@@ -92,9 +93,9 @@ public class AlumnosService {
         statement = this.conn.createStatement();
         String sql;
         if(groupID==0){
-            sql = String.format("UPDATE alumnos SET nombre = '%s', apellidos = '%s', grupo=null  WHERE id=%d", nombre, apellidos, id);
+            sql = String.format("UPDATE alumnos SET nombre = '%s', apellidos = '%s', id_grupo=null  WHERE id=%d", nombre, apellidos, id);
         }else{
-        sql = String.format("UPDATE alumnos SET nombre = '%s', apellidos = '%s', grupo='%s' WHERE id=%d", nombre, apellidos,groupID, id);
+        sql = String.format("UPDATE alumnos SET nombre = '%s', apellidos = '%s', id_grupo='%s' WHERE id=%d", nombre, apellidos,groupID, id);
     }
         // Ejecución de la consulta
         long affectedRows = statement.executeUpdate(sql);

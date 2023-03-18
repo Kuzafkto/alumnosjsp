@@ -14,40 +14,61 @@
     <%
      String mode=request.getParameter("mode");
      ConnectionPool pool=(ConnectionPool)session.getAttribute("pool");
-    //boton de se creo satisfactoriamente + volver a la lista de alumnos + obtener parametro que sale en el metodo y si 
-    //funcionó perfectamente sale el mensaje y de lo contrario error.
-
 
      try{
         AlumnosService aService = new AlumnosService(pool.getConnection());
-        GruposService gService = new GruposService(pool.getConnection());
 
         String op=request.getParameter("op");
         if(op!=null&&op.equals("create")){
             try{
                 String name=request.getParameter("nombre");
                 String surnames=request.getParameter("apellidos");
-                int groupId=Integer.parseInt(request.getParameter("ID Grupo"));
                 aService.create(name,surnames,0);
-                mode="confirm";
                 out.print("<span>Se ha creado el usuario "+name+" "+surnames+"</span>");
                 out.print("<form method=\"post\" action=\"alumnos.jsp\"><input type=\"submit\" value=\"volver\"></form>");
-            }catch (Exception e) {
+            }catch (SQLException e) {
+            out.print("<span>Error</span><br>");
+            out.print("<span>"+e.getStackTrace().toString()+"</span>");
             e.printStackTrace();
     } finally {
         pool.closeAll();
     }
-        }else if(op!=null&&op.equals("edit")){
+        }else if(op!=null&&(op.equals("edit")||op.equals("unassign")||op.equals("assign"))){
             try{
-                int id=Integer.parseInt(request.getParameter("id"));
+                long id=Long.parseLong(request.getParameter("id"));
                 String name=request.getParameter("nombre");
                 String surnames=request.getParameter("apellidos");
-                aService.update(id,name,surnames,0);
-                mode="confirm";
-                out.print("<span>Se ha editado el usuario "+name+" "+surnames+"</span>");
+                if(op.equals("assign")){
+                    Long groupID=Long.parseLong(request.getParameter("id_grupo"));
+                    aService.update(id,name,surnames,groupID);
+                    out.print("<span>Se ha matriculado el usuario "+name+" "+surnames+"</span>");
+                    out.print("<form method=\"post\" action=\"matriculacion.jsp\"><input type=\"submit\" value=\"Volver\"></form>");
+                }else{
+                    aService.update(id,name,surnames,0);
+                    if(op.equals("edit")){
+                        out.print("<span>Se ha editado el usuario "+name+" "+surnames+"</span>");
+                        out.print("<form method=\"post\" action=\"alumnos.jsp\"><input type=\"submit\" value=\"Volver\"></form>");
+                    }else{
+                        out.print("<span>Se ha desmatriculado el usuario "+name+" "+surnames+"</span>");
+                        out.print("<form method=\"post\" action=\"matriculacion.jsp\"><input type=\"submit\" value=\"Volver\"></form>");
+
+                    }
+                }
+            }catch (Exception e) {
+            e.printStackTrace();
+            out.print("<span>Error</span>");
+    } finally {
+        pool.closeAll();
+    }
+        }else if(op!=null&&op.equals("delete")){
+            try{
+                long id=Long.parseLong(request.getParameter("id"));
+                aService.delete(id);
+                out.print("<span>Se ha borrado el usuario</span>");
                 out.print("<form method=\"post\" action=\"alumnos.jsp\"><input type=\"submit\" value=\"volver\"></form>");
             }catch (Exception e) {
             e.printStackTrace();
+            out.print("<span>Error</span>");
     } finally {
         pool.closeAll();
     }
@@ -63,21 +84,31 @@
         <input type="submit" value="Crear">
     </form>
     <%}else if( mode != null&&mode.equals("edit")){
-        int id=Integer.parseInt(request.getParameter("id"));
+        long id=Long.parseLong(request.getParameter("id"));
         String name=request.getParameter("name");
         String surnames=request.getParameter("surnames");
         %>
         <form method="get" action="controlAlumnos.jsp">
             <input type="hidden" name="op" value="edit">
+            <input type="hidden" name="id" value=<%=id%> required>
             <input type="text" name="nombre" value=<%=name%> required>
             <input type="text" name="apellidos" value=<%=surnames%> required>
             <input type="submit" value="Confirmar">
         </form>
 
 
-     <%}else if(mode != null&&mode.equals("delete")){%>
-
-
+     <%}else if(mode != null&&mode.equals("delete")){
+        long id=Long.parseLong(request.getParameter("id"));
+        %>
+        <form method="get" action="controlAlumnos.jsp">
+            <input type="hidden" name="op" value="delete">
+            <input type="hidden" name="id" value=<%=id%> required>
+            <input type="submit" value="Confirmar">
+        </form>
+        <%}if (mode!=null){%>
+            <form method="get" action="alumnos.jsp">
+                <input type="submit" value="Cancelar">
+            </form>
         <%}
         
      }catch (SQLException e) {
@@ -85,6 +116,6 @@
     } finally {
         pool.closeAll();
     }%>
- 
+    
 </body>
 </html>
