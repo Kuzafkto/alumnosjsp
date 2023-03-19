@@ -1,0 +1,207 @@
+/*
+-------------------GESTION DE ALUMNADO------------
+---------------------POR MARCO VALENTE------------
+*/
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+
+:root{
+    --main:#ffff;
+    --index:#028090;
+    --error:#6c0000;
+    --header:#005a2d;
+    --buttonBackg:#00BFB2;
+    --cancel:#ff3300;
+    --confirm:#A5BE00;
+    --dark:#171411;
+}
+
+*{
+    font-family:'Lato', sans-serif;;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: var(--main);
+}
+
+.menuContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: var(--index);
+}
+.menuContainer.error{
+    background-color:var(--error);
+    color: whitesmoke;
+    font-family: 'Roboto';
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.menuContainer.confirm{
+    font-size: 1.2rem;
+    font-family: 'Roboto';
+    background-color:var(--confirm);
+}
+.menuButton{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.menuButton h1{
+    width: 100%;
+    text-align: center;
+    padding: 5%;
+}
+
+.menuRow{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100vw;
+}
+.menuContainer .item-input{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.menuContainer .item-input input{
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 2%;
+    border-radius: 15px;
+    background-color: #14110F;
+    color:whitesmoke
+}
+
+.title{
+    padding: 2%;
+    background-color: #14110F;
+    width: 50%;
+    text-align: center;
+    border-radius: 20px;
+    color:whitesmoke
+}
+
+.submit.access{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+.submit.access input{
+    padding: 1rem;
+    background-color: var(--confirm);
+    font-family: 'Roboto';
+    border-radius: 15px;
+    font-size: 1rem;
+}
+.submit.main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.submit.students{
+    font-size: 2rem;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.check{
+    background-color: var(--confirm) !important;
+    border-color: var(--confirm) !important;
+    color:var(--dark) !important; 
+}
+
+.backButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 5%;
+}
+
+.backButton button{
+    font-size: 3rem;
+    padding: 5px 10px 5px 10px;
+    border-radius: 15px;
+}
+.btn{
+    background-color: var(--index);
+    color: whitesmoke;
+    border-width: 0.7rem;
+    padding: 3rem;
+    display: flex;
+    border-radius: 10px;
+    border-color:var(--buttonBackg);
+}.btn-students{
+    font-size: 5rem;
+}
+.btn-groups{
+    font-size: 6rem;
+}
+.btn-register{
+    font-size: 6rem;
+}
+.btn-back{
+    font-size: 3rem;
+    padding: 1rem;
+    border-color:#14110F;
+    background-color: #14110F;
+}
+.fa.fa-graduation-cap{
+    padding: 0.5rem;
+}
+
+.th{
+    background-color: var(--header);
+    color: whitesmoke;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-radius: 20px 20px 0 0;
+    padding: 1rem 1%;
+}
+
+.th .td{
+    font-size: 1.5rem;
+}
+
+.td{
+    width: 100%;
+    padding: 1rem 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.tr{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 1rem 1%;
+}
+
+.table {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
